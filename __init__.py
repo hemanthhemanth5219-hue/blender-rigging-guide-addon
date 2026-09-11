@@ -13,7 +13,7 @@ bl_info = {
 
 import bpy
 from bpy.props import IntProperty, StringProperty, BoolProperty
-from . import ui, operators, guides
+from . import ui, operators, guides, help_system
 
 classes = [
     operators.RiggingGuideProperties,
@@ -21,7 +21,12 @@ classes = [
     operators.PreviousStepOperator,
     operators.ResetGuideOperator,
     ui.RiggingGuidePanel,
+    help_system.RiggingAddonHelpOperator,
+    help_system.RiggingAddonHelpPanel,
 ]
+
+# Keymap storage
+addon_keymaps = []
 
 def register():
     for cls in classes:
@@ -39,8 +44,23 @@ def register():
         description="Type of rigging guide",
         default="basic"
     )
+    
+    # Register keymap for Shift+/
+    wm = bpy.context.window_manager
+    km = wm.keyconfigs.addon.keymaps.new(name='Screen', space_type='EMPTY')
+    kmi = km.keymap_items.new("wm.rigging_addon_help", 'SLASH', 'PRESS', shift=True)
+    addon_keymaps.append((km, kmi))
+    
+    print("✓ Rigging Guide Addon registered successfully!")
+    print("✓ Press N to open addon panel")
+    print("✓ Press Shift+/ to open help system")
 
 def unregister():
+    # Unregister keymap
+    for km, kmi in addon_keymaps:
+        km.keymap_items.remove(kmi)
+    addon_keymaps.clear()
+    
     for cls in reversed(classes):
         bpy.utils.unregister_class(cls)
     
@@ -48,6 +68,8 @@ def unregister():
         del bpy.types.Scene.rigging_guide_index
     if hasattr(bpy.types.Scene, 'rigging_guide_type'):
         del bpy.types.Scene.rigging_guide_type
+    
+    print("✓ Rigging Guide Addon unregistered")
 
 if __name__ == "__main__":
     register()
