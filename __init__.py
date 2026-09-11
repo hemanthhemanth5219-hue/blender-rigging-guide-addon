@@ -20,7 +20,11 @@ classes = [
     operators.NextStepOperator,
     operators.PreviousStepOperator,
     operators.ResetGuideOperator,
+    ui.SelectGuideOperator,
     ui.RiggingGuidePanel,
+    ui.RiggingToolsPanel,
+    ui.RiggingTipsPanel,
+    ui.HelpAccessPanel,
     help_system.RiggingAddonHelpOperator,
     help_system.RiggingAddonHelpPanel,
 ]
@@ -51,9 +55,13 @@ def register():
     kmi = km.keymap_items.new("wm.rigging_addon_help", 'SLASH', 'PRESS', shift=True)
     addon_keymaps.append((km, kmi))
     
-    print("✓ Rigging Guide Addon registered successfully!")
+    print("\n" + "="*60)
+    print("✓ RIGGING GUIDE ADDON REGISTERED SUCCESSFULLY!")
+    print("="*60)
     print("✓ Press N to open addon panel")
     print("✓ Press Shift+/ to open help system")
+    print("✓ Select your guide type to start!")
+    print("="*60 + "\n")
 
 def unregister():
     # Unregister keymap
